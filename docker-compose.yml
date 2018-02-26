@@ -1,6 +1,6 @@
 version: '2'
 services:
-  db:
+  couchdb:
     image: couchdb:1.7.1
     ports:  
       - "35984:5984"
@@ -10,5 +10,5 @@ services:
   couchbackup:
     build: ./build
     links:
-      - db
+      - couchdb
     network_mode: bridge
