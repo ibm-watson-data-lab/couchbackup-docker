@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# connect to CouchDB
 echo "$(date) - Trying to connect to CouchDB..."
 statusCode="$(curl -f -s -o /dev/null -w "%{http_code}" --head http://db:5984/)"
 while [ $statusCode -ne "200" ]; do
@@ -8,7 +10,7 @@ while [ $statusCode -ne "200" ]; do
 done
 echo "$(date) - Connected to CouchDB."
 
-# replication
+# create replication
 sourceDb=$1/$2
 targetDb="http://localhost:5984/"$2
 echo "$(date) - Creating replication..."
@@ -21,7 +23,7 @@ if [ $ok != "true" ]; then
 fi
 echo "$(date) - Replication created."
 
-# create replication database
+# wait for replication to complete
 echo "$(date) - Checking replication state..."
 replicationState="$(curl -s http://db:5984/_replicator/couchbackup | jq '._replication_state')"
 while [ $replicationState != "\"completed\"" ]; do
