@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: couchdb:1.7.1
+    ports:  
+      - "35984:5984"
+    volumes:
+      - ./data:/usr/local/var/lib/couchdb
+    network_mode: bridge
+  couch:
+    image: markwatsonatx/couchbackup:latest 
+    links:
+      - db
+    network_mode: bridge
