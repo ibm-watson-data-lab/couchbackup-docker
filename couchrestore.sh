@@ -1,9 +1,9 @@
 #!/bin/bash
 printSyntax() {
    echo "Syntax:"
-   echo "   ./couchbackup.sh <full url> or ./couchbackup.sh <partial url> <database>"
+   echo "   ./couchrestore.sh <full url> or ./couchbackup.sh <partial url> <database>"
    echo "e.g." 
-   echo "   ./couchbackup.sh https://user:pass@myhost.cloudant.com/mydb"
+   echo "   ./couchrestore.sh https://user:pass@myhost.cloudant.com/mydb"
 }
 
 url=$1
@@ -30,8 +30,9 @@ elif [ "$#" -eq 1 ]; then
    fi
 fi
 
+mkdir -p ./data
+cp ./$db.couch ./data/
 docker-compose build
-docker-compose run couchbackup backup $url $db
+docker-compose run couchbackup restore $url $db
 docker-compose down
-mv ./data/$db.couch ./
 rm -rf ./data

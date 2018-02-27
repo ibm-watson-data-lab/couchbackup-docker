@@ -11,11 +11,11 @@ done
 echo "$(date) - Connected to CouchDB."
 
 # create replication
-sourceDb=$1/$2
-targetDb="http://localhost:5984/"$2
+sourceDb="http://localhost:5984/"$2
+targetDb=$1/$2
 echo "$(date) - Creating replication..."
 json=$(echo "{\"source\":\""$sourceDb"\",\"target\":\""$targetDb"\",\"create_target\":true}")
-cmd=$(echo "curl -s -d '"$json"' -H 'Content-Type: application/json' -X PUT http://couchdb:5984/_replicator/couchbackup")
+cmd=$(echo "curl -s -d '"$json"' -H 'Content-Type: application/json' -X PUT http://couchdb:5984/_replicator/couchrestore")
 ok=$(eval $cmd | jq '.ok')
 if [ $ok != "true" ]; then
     echo "$(date) - Replication failed."
@@ -25,11 +25,11 @@ echo "$(date) - Replication created."
 
 # wait for replication to complete
 echo "$(date) - Checking replication state..."
-replicationState="$(curl -s http://couchdb:5984/_replicator/couchbackup | jq '._replication_state')"
+replicationState="$(curl -s http://couchdb:5984/_replicator/couchrestore | jq '._replication_state')"
 while [ $replicationState != "\"completed\"" ]; do
     echo "$(date) - Replication State=$replicationState; checking replication state in 15 seconds..."
     sleep 15
     echo "$(date) - Checking replication status..."
-    replicationState="$(curl -s http://couchdb:5984/_replicator/couchbackup | jq '._replication_state')"
+    replicationState="$(curl -s http://couchdb:5984/_replicator/couchrestore | jq '._replication_state')"
 done
 echo "$(date) - Replication complete."

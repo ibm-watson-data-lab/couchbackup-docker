@@ -3,5 +3,6 @@ FROM alpine:latest
 RUN apk add --no-cache bash curl jq
 
 COPY backup.sh /usr/local/bin/backup
+COPY restore.sh /usr/local/bin/restore
 
-CMD ["/usr/local/bin/backup"]
+CMD ["/bin/bash"]
