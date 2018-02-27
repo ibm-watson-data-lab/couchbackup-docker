@@ -30,6 +30,12 @@ elif [ "$#" -eq 1 ]; then
    fi
 fi
 
+if [ ! -f ./$db.couch ]; then
+   echo "Error: ./"$db".couch Not Found"
+   printSyntax
+   exit 1
+fi
+
 mkdir -p ./data
 cp ./$db.couch ./data/
 docker-compose build
